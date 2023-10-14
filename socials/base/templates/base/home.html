@@ -174,9 +174,11 @@
 
           </div>
           <div class="photo">
+            {% if post.image %}
             <a href="{{ post.image.url }}">
               <img src="{{ post.image.url }}" alt="feed-1" style="height: 450px; object-fit: cover;">
             </a>
+            {% endif %}
           </div>
           <div class="action-buttons">
             <div class="interaction-buttons">
@@ -191,6 +193,7 @@
             </div>
 
             <!-- Downloading th post-img -->
+            {% if post.image %}
             <a href="{{post.image.url}}" class="flex items-center space-x-2 flex-1 justify-end"
               style="text-decoration: none;" download>
               <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" aria-hidden="true"
@@ -201,6 +204,8 @@
                 </g>
               </svg>
             </a>
+            {% endif %}
+
           </div>
 
           <!-- Like section -->

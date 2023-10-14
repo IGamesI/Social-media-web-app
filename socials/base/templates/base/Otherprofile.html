@@ -18,24 +18,62 @@
             <img src="{{ page_user.profileimg.url }}" alt="profileimg" class="img-circle rounded-circle img-fluid"
                 style="hwidth: 150px; aspect-ratio: 1; object-fit: cover;">
         </div>
-        <div class="col-md-9 p-t-2" style="margin-top:20px;">
-            <h2 class="h2-responsive">@{{page_user.username}} </h2>
+        <div class="col-md-9 p-t-2" style="">
+            <div style="display: flex; flex-direction: row; gap: 5px; align-items: center;">
+                <h2 class="h2-responsive" style="padding-left: 0px;">{{page_user.fname}} </h2>
+                {% if verified != "f" %}
+                <!-- <p>{{verified}}</p> -->
+                <button id="verified-btn" style="background-color: rgba(0, 0, 0, 0); border: none; outline: none;">
+                    <img src="{% static 'images/verified/Verified_'|add:verified|add:'.png' %}"
+                        style="width: 22.5px; height: 22.5px; margin-bottom: 2.5px;" alt="">
+                    <div id="verified-info" style="display: none; position: absolute; z-index: 20; background-color: #fff; box-shadow:  20px 20px 60px #bebebe,
+                        -20px -20px 60px #ffffff; border-radius: 10px; padding: 10px; width: 200px;">
+                        <div
+                            style="display: flex; flex-direction: row; gap: 5px; align-items: center; margin-bottom: 15px;">
+                            <img src="{% static 'images/verified/Verified_'|add:verified|add:'.png' %}"
+                                style="width: 20px; height: 20px; margin-bottom: 2.5px;" alt="">
+                            <p style="margin-bottom: 0px;font-size: 18px; font-weight: 500; text-align: left;">
+                                {% if verified == "o" %}
+                                Verified School Official
+                                {% elif verified == "c" %}
+                                Verified Celebrity
+                                {% elif verified == "a" %}
+                                Verified Admin
+                                {% elif verified == "s" %}
+                                Verified Student Council Member
+                                {% endif %}
+                            </p>
+                        </div>
+                        <p
+                            style="margin-top: -15px; color: grey; font-size: 15px; font-weight: 400; text-align: left; margin-bottom: 0px;">
+                            {% if verified == "o" %}
+                            This account is verified because it's an official helli3 account
+                            {% elif verified == "c" %}
+                            This account is verified because it has a lot of followers
+                            {% elif verified == "a" %}
+                            This account is verified because it's an admin account
+                            {% elif verified == "s" %}
+                            This account is verified because it's an official account of the helli3 student council
+                            {% endif %}
+                        </p>
+                    </div>
+                </button>
+                {% endif %}
+            </div>
             <form action="/follow" method="POST">
                 {% csrf_token %}
                 <input type="hidden" value="{{page_user.username}}" name="user" />
                 <input type="hidden" value="{{request.user.username}}" name="follower" />
 
                 {% if page_user.id != request.user.id %}
-                <a data-ripple="">
-                    <button type="submit" class="btn btn-success follow-btn"
-                        style="position: relative;left: 300px; bottom: 40px;">{{button_text}}</button></h2>
-                </a>
+                <button type="submit" class="btn btn-success follow-btn"
+                    style="position: relative;left: 300px; bottom: 40px;">{{button_text}}</button>
                 {% endif %}
 
-                <p class="profile-name">{{page_user.fname}}</p>
-                <p style="position: relative;left: 20px;">{{page_user.description}}</p>
-                <ul class="flex-menu">
-
+                <p class="profile-name" style="margin-top: -45px; padding-left: 0px; font-size: 15px; color: grey;">
+                    @{{page_user.username}}</p>
+                <p style=" padding-left: 0px;">{{page_user.description}}</p>
+                <ul class="flex-menu" style="padding-left: 10px;">
                     <li><strong>{{num_posts}}</strong> posts</li>
                     <li><strong>{{user_followers}}</strong> followers</li>
                     <li><strong>{{user_following}}</strong> following</li>
@@ -47,6 +85,7 @@
 
     <div class="row">
         {% for post in logged_in_user_posts %}
+        {% if post.image %}
         <div class="col-sm-12 col-md-6 col-lg-4">
             <div class="view overlay hm-black-light m-b-2">
                 <a href="{{post.image.url}}">
@@ -54,8 +93,17 @@
                 </a>
             </div>
         </div>
+        {% endif %}
         {% endfor %}
     </div>
+
+    <script>
+        let verifiedButton = document.getElementById("verified-btn");
+        let verifiedPopup = document.getElementById("verified-info");
+        verifiedButton.addEventListener("click", () => {
+            verifiedPopup.style.display = verifiedPopup.style.display == "none" ? "block" : "none";
+        });
+    </script>
 
 </div>
 
